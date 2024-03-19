@@ -1,6 +1,7 @@
 package studentOrder;
 
 import studentOrder.domain.Adult;
+import studentOrder.domain.Child;
 import studentOrder.domain.StudentOrder;
 
 public class SaveStudentOrder {
@@ -21,7 +22,15 @@ public class SaveStudentOrder {
 
     static StudentOrder buildStudentOrder(long id){
         StudentOrder so = new StudentOrder();
-        so.setStudentOrderId(id);
+
+       Adult husband = new Adult(null,null,null,null,null);
+       Adult wife = new Adult(null,null,null,null,null);
+       husband.setPassportSeria(""+ (1000 + id));
+       wife.setPassportSeria(""+ (2000 + id));
+
+        so.setHusband(husband);
+        so.setWife(wife);
+        so.addChild(new Child(null,null,null,null,null));
 
 
         return so;

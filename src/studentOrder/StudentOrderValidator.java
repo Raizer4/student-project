@@ -1,11 +1,18 @@
 package studentOrder;
 
 import studentOrder.domain.*;
+import studentOrder.domain.children.AnswerChildren;
+import studentOrder.domain.register.AnswerCityRegister;
+import studentOrder.domain.student.AnswerStudent;
+import studentOrder.domain.wedding.AnswerWedding;
 import studentOrder.mail.MailSender;
 import studentOrder.validator.ChildrenValidator;
 import studentOrder.validator.CityRegisterValidator;
 import studentOrder.validator.StudentValidator;
 import studentOrder.validator.WeddingValidator;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class StudentOrderValidator {
 
@@ -29,32 +36,32 @@ public class StudentOrderValidator {
     }
 
      void checkAll(){
-         StudentOrder[] so = readStudentOrders();
+         List<StudentOrder> soList = readStudentOrders();
 
-         for (int i = 0; i < so.length; i++){
-             checkOneOrder(so[i]);
+         for (StudentOrder temp : soList){
+             checkOneOrder(temp);
          }
 
     }
 
-    public void checkOneOrder(StudentOrder so){
+    public static List<StudentOrder> readStudentOrders(){
+        List<StudentOrder> soList = new LinkedList<>();
 
-        AnswerCityRegister cityRegister = checkCityRegister(so);
-        AnswerChildren childAnswer = checkChildren(so);
-        AnswerStudent studentAnswer = checkStudent(so);
-        AnswerWedding wedAnswer = checkWedding(so);
-        sendMail(so);
-    }
-
-    public static StudentOrder[] readStudentOrders(){
-        StudentOrder[] soArray = new StudentOrder[3];
-
-        for (int c = 0; c < soArray.length;c++){
-            soArray[c] = SaveStudentOrder.buildStudentOrder(c);
+        for (int c = 0; c < soList.size();c++){
+            soList.add(SaveStudentOrder.buildStudentOrder(c));
         }
 
-        return soArray;
+        return soList;
     }
+
+    public void checkOneOrder(StudentOrder so){
+        AnswerCityRegister cityRegister = checkCityRegister(so);
+        //AnswerChildren childAnswer = checkChildren(so);
+        //AnswerStudent studentAnswer = checkStudent(so);
+        //AnswerWedding wedAnswer = checkWedding(so);
+        //sendMail(so);
+    }
+
 
     public AnswerCityRegister checkCityRegister(StudentOrder so){
         return cityRegisterVal.checkCityRegister(so);

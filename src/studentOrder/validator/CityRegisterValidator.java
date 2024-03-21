@@ -7,10 +7,13 @@ import studentOrder.domain.register.AnswerCityRegisterItem;
 import studentOrder.domain.register.CityRegisterResponse;
 import studentOrder.domain.StudentOrder;
 import studentOrder.exception.CityRegisterException;
+import studentOrder.exception.TransportException;
 import studentOrder.validator.register.CityRegisterChecker;
 import studentOrder.validator.register.FakeCityRegisterChecker;
 
 public class CityRegisterValidator {
+
+    public static final String IN_GRN = "NO GRN";
 
     String hostName;
     String login;
@@ -37,13 +40,30 @@ public class CityRegisterValidator {
 
     private AnswerCityRegisterItem checkPerson(Person person){
 
+        AnswerCityRegisterItem.CityStatus status = null;
+        AnswerCityRegisterItem.CityError error = null;
+
         try {
-            CityRegisterResponse cans = personChecker.checkPerson(person);
-        } catch (CityRegisterException e) {
-            e.printStackTrace(System.out);
+            CityRegisterResponse tmp = personChecker.checkPerson(person);
+            status = tmp.isExisting() ? AnswerCityRegisterItem.CityStatus.YES :
+                                        AnswerCityRegisterItem.CityStatus.NO;
+        } catch (CityRegisterException ex) {
+            ex.printStackTrace(System.out);
+            status = AnswerCityRegisterItem.CityStatus.ERROR;
+            error = new AnswerCityRegisterItem.CityError(ex.getCode(),ex.getMessage());
+        }catch (TransportException ex) {
+            ex.printStackTrace(System.out);
+            status = AnswerCityRegisterItem.CityStatus.ERROR;
+            error = new AnswerCityRegisterItem.CityError(IN_GRN,ex.getMessage());
+        }catch (Exception ex){
+            ex.printStackTrace(System.out);
+            status = AnswerCityRegisterItem.CityStatus.ERROR;
+            error = new AnswerCityRegisterItem.CityError(IN_GRN,ex.getMessage());
         }
 
-        return null;
+        AnswerCityRegisterItem ans = new AnswerCityRegisterItem(status,person,error);
+
+        return ans;
     }
 
 }

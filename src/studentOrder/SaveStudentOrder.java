@@ -4,12 +4,24 @@ import studentOrder.domain.Adult;
 import studentOrder.domain.Child;
 import studentOrder.domain.StudentOrder;
 
+import java.sql.*;
+
 public class SaveStudentOrder {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception{
 
-        StudentOrder so1 = new StudentOrder();
-        saveStudentOrder(so1);
+        Class.forName("org.postgresql.Driver");
+        Connection con = DriverManager.getConnection(
+                "jdbc:postgresql://localhost:5432/jc_student",
+                "postgres","1");
+        Statement stmt = con.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT");
+        while (rs.next()){
+            System.out.println(rs.getLong(1));
+        }
+
+        //StudentOrder so1 = new StudentOrder();
+        //saveStudentOrder(so1);
 
     }
 

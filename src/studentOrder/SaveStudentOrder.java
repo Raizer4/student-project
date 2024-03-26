@@ -10,18 +10,8 @@ public class SaveStudentOrder {
 
     public static void main(String[] args) throws Exception{
 
-        Class.forName("org.postgresql.Driver");
-        Connection con = DriverManager.getConnection(
-                "jdbc:postgresql://localhost:5432/jc_student",
-                "postgres","1");
-        Statement stmt = con.createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT");
-        while (rs.next()){
-            System.out.println(rs.getLong(1));
-        }
-
-        //StudentOrder so1 = new StudentOrder();
-        //saveStudentOrder(so1);
+        StudentOrder so1 = new StudentOrder();
+        saveStudentOrder(so1);
 
     }
 
